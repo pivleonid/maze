@@ -136,7 +136,6 @@ Glif_Rectange* MainWindow::getRectange(int x, int y)
     int x_ = ui->spinBox->value();
     int y_ = ui->spinBox_2->value();
 
-    //QVector< Glif_Rectange* > m_glips;
     if(x < 0 || y < 0)
         return nullptr;
     if(x >= x_ || y >= y_)
@@ -154,22 +153,15 @@ void MainWindow::slotCustomMenuRequested(const QPoint pos)
     menu.popup(ui->graphicsView->viewport()->mapToGlobal(pos));
     Glif_Rectange* element = dynamic_cast<Glif_Rectange*> (ui->graphicsView->itemAt(pos));
 
+    if( element == nullptr) return;
 
-    if( element == nullptr)
-    {
+    QAction* pointA = menu.addAction("Точка А");
+    QAction* pointB = menu.addAction("Точка B");
+    QAction* addStop     = menu.addAction("Добавить/Удалить Препятствие");
+    connect(pointA,     SIGNAL(triggered()), this, SLOT(pointA()));
+    connect(pointB,     SIGNAL(triggered()), this, SLOT(pointB()));
+    connect(addStop,    SIGNAL(triggered()), this, SLOT(add_remStop()));
 
-        QAction* removeItem = menu.addAction("идите нахуй");
-    }
-    else{
-
-
-        QAction* pointA = menu.addAction("Точка А");
-        QAction* pointB = menu.addAction("Точка B");
-        QAction* addStop     = menu.addAction("Добавить/Удалить Препятствие");
-        connect(pointA,     SIGNAL(triggered()), this, SLOT(pointA()));
-        connect(pointB,     SIGNAL(triggered()), this, SLOT(pointB()));
-        connect(addStop,    SIGNAL(triggered()), this, SLOT(add_remStop()));
-    }
     QAction* selectedAction = menu.exec();
 
 }
@@ -191,6 +183,81 @@ void MainWindow::pointB(){
 void MainWindow::add_remStop(){
     Glif_Rectange* element = dynamic_cast<Glif_Rectange*> (ui->graphicsView->itemAt(m_pos));
     element->switchStopBlock();
+    if(element->m_StopBlock){
+        Glif_Rectange* tmp = getRectange(element->m_x - 1, element->m_y);
+        element->m_left = nullptr;
+        if(tmp)
+            tmp->m_right = nullptr;
+
+        tmp = getRectange(element->m_x + 1, element->m_y);
+        element->m_right = nullptr;
+        if(tmp)
+            tmp->m_left = nullptr;
+
+        tmp = getRectange(element->m_x, element->m_y + 1);
+        element->m_down = nullptr;//тут было наоборот проверить
+        if(tmp)
+            tmp->m_up = nullptr;
+
+        tmp = getRectange(element->m_x, element->m_y - 1);
+        element->m_up = nullptr;
+        if(tmp)
+            tmp->m_down = nullptr;
+    }
+    else{
+        //+ проверка на блок препятствие
+        Glif_Rectange* tmp = getRectange(element->m_x - 1, element->m_y);
+        if(tmp)
+            tmp->m_right = element;
+        element->m_left  = tmp;
+        if(tmp){
+            if(tmp->m_StopBlock)
+            {
+                tmp->m_right = nullptr;
+                element->m_left  = nullptr;
+            }
+        }
+
+
+        tmp = getRectange(element->m_x, element->m_y - 1);
+        if(tmp)
+            tmp->m_down = element;
+        element->m_up  = tmp;
+        if(tmp){
+            if(tmp->m_StopBlock)
+            {
+                tmp->m_down = nullptr;
+                element->m_up  = nullptr;
+            }
+        }
+
+        tmp = getRectange(element->m_x + 1, element->m_y);
+        if(tmp)
+            tmp->m_left = element;
+        element->m_right  = tmp;
+        if(tmp){
+            if(tmp->m_StopBlock)
+            {
+                tmp->m_left = nullptr;
+                element->m_right  = nullptr;
+            }
+        }
+
+        tmp = getRectange(element->m_x, element->m_y + 1);
+        if(tmp)
+            tmp->m_up = element;
+        element->m_down  = tmp;
+        if(tmp){
+            if(tmp->m_StopBlock)
+            {
+                tmp->m_up = nullptr;
+                element->m_down  = nullptr;
+            }
+        }
+    }
+
+
+
     m_scena->update();
 }
 

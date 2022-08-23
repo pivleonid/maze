@@ -17,24 +17,36 @@ void Glif_Rectange::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QW
 
 
   painter->setPen(QPen(Qt::black, 0, Qt::SolidLine));
-  painter->setBrush(m_color);
+  //painter->setBrush(m_color);
 
-  if(m_Start)
-  {
-
-      QRectF A(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius));
+  if(m_Start){
       painter->setBrush(Qt::GlobalColor::green);
-      painter->drawText(A, Qt::AlignCenter, "m_name");
-
-      return; //не понял почему цвет и надпись не появляются
-
+      painter->drawRect(QRectF(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius)));
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 10), Qt::AlignCenter, m_up?( QString::number(m_up->m_x) + " "+ QString::number(m_up->m_y)):"");// верхняя точка
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 150), Qt::AlignCenter, m_down?( QString::number(m_down->m_x) + " "+ QString::number(m_down->m_y)):"");// нижняя точка
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius*3, 100), Qt::AlignCenter, m_right?( QString::number(m_right->m_x) + " "+ QString::number(m_right->m_y)):"");// правая точка
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius, 100), Qt::AlignCenter, m_left?( QString::number(m_left->m_x) + " "+ QString::number(m_left->m_y)):"");// левая точка
+      return;
   }
-  if(m_Stop)  painter->setBrush(Qt::GlobalColor::darkYellow);
+  if(m_Stop) {
+      painter->setBrush(Qt::GlobalColor::darkYellow);
+      painter->drawRect(QRectF(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius)));
+      //painter->drawText(QRect(-m_radius, 0, m_radius*2, 10), Qt::AlignCenter, "B");
+      painter->drawRect(QRectF(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius)));
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 10), Qt::AlignCenter, m_up?( QString::number(m_up->m_x) + " "+ QString::number(m_up->m_y)):"");// верхняя точка
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 150), Qt::AlignCenter, m_down?( QString::number(m_down->m_x) + " "+ QString::number(m_down->m_y)):"");// нижняя точка
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius*3, 100), Qt::AlignCenter, m_right?( QString::number(m_right->m_x) + " "+ QString::number(m_right->m_y)):"");// правая точка
+      painter->drawText(QRect(-m_radius, -m_radius, m_radius, 100), Qt::AlignCenter, m_left?( QString::number(m_left->m_x) + " "+ QString::number(m_left->m_y)):"");// левая точка
+      return;
+  }
   if(m_StopBlock)  painter->setBrush(Qt::GlobalColor::gray);
-
-
-
   //Левая и правая координата
+  painter->drawRect(QRectF(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius)));
+  painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 10), Qt::AlignCenter, m_up?( QString::number(m_up->m_x) + " "+ QString::number(m_up->m_y)):"");// верхняя точка
+  painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 150), Qt::AlignCenter, m_down?( QString::number(m_down->m_x) + " "+ QString::number(m_down->m_y)):"");// нижняя точка
+  painter->drawText(QRect(-m_radius, -m_radius, m_radius*3, 100), Qt::AlignCenter, m_right?( QString::number(m_right->m_x) + " "+ QString::number(m_right->m_y)):"");// правая точка
+  painter->drawText(QRect(-m_radius, -m_radius, m_radius, 100), Qt::AlignCenter, m_left?( QString::number(m_left->m_x) + " "+ QString::number(m_left->m_y)):"");// левая точка
+
   painter->drawRect(QRectF(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius)));
 }
 
