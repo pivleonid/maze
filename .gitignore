@@ -1,0 +1,7 @@
+*.bat
+Makefile
+*Debug
+*Release
+*stash
+/*.user
+ui_mainwindow.h
