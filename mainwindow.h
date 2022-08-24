@@ -35,5 +35,8 @@ public slots:
     void add_remStop();
 
     void generate();
+    void search();
+
+    Glif_Rectange* getStart();
 };
 #endif // MAINWINDOW_H

@@ -40,6 +40,11 @@ void Glif_Rectange::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QW
       return;
   }
   if(m_StopBlock)  painter->setBrush(Qt::GlobalColor::gray);
+
+  if(m_father)
+  {
+      painter->setBrush(Qt::GlobalColor::red);
+  }
   //Левая и правая координата
   painter->drawRect(QRectF(QPoint(-m_radius, -m_radius), QPoint(m_radius, m_radius)));
   painter->drawText(QRect(-m_radius, -m_radius, m_radius*2, 10), Qt::AlignCenter, m_up?( QString::number(m_up->m_x) + " "+ QString::number(m_up->m_y)):"");// верхняя точка

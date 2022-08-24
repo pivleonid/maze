@@ -32,6 +32,17 @@ public:
     Glif_Rectange* m_up   = nullptr;
     Glif_Rectange* m_down = nullptr;
 
+    Glif_Rectange* m_father = nullptr;
+    void getNeighbors(QVector<Glif_Rectange*> &vec){
+        if(m_left && !(m_left->m_father))
+            vec.append(m_left);
+        if(m_right && !(m_right->m_father))
+            vec.append(m_right);
+        if(m_up && !(m_up->m_father))
+            vec.append(m_up);
+        if(m_down && !(m_down->m_father))
+            vec.append(m_down);
+    }
 
 
 public:
@@ -41,6 +52,8 @@ public:
     bool m_StopBlock = false;
     bool m_Start = false;
     bool m_Stop = false;
+
+
 
     explicit Glif_Rectange(int x, int y, size_t radius = 50, QColor color = Qt::GlobalColor::white,
                          QObject *parent = nullptr);

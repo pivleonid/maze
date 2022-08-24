@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "glif_rectange.h"
+#include <QQueue>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->graphicsView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotCustomMenuRequested(QPoint)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(generate()));
+    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(search()));
 
 
     generate();
@@ -24,6 +26,42 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::search()
+{
+    QQueue<Glif_Rectange*> queue;
+    Glif_Rectange* start = getStart();
+    start->m_father = start;
+    queue.enqueue(start);
+    while(!queue.isEmpty())
+    {
+        Glif_Rectange* current, *neighbors;
+        current = queue.dequeue();
+        QVector<Glif_Rectange*> vec;
+        current->getNeighbors(vec);
+
+        foreach (auto var, vec) {
+            var->m_father = current;
+            m_scena->update();
+            QApplication::processEvents();
+            if (var->m_Stop == true)
+            {
+                int i;
+                i++;
+                return;
+            }
+            queue.enqueue(var);
+        }
+    }
+
+}
+Glif_Rectange* MainWindow::getStart()
+{
+    foreach (auto var, m_glips) {
+        if(var->m_Start == true) return var;
+    }
+    return nullptr;
 }
 
 void MainWindow::generate()
@@ -50,8 +88,13 @@ void MainWindow::generate()
         x = 0;
     }
     setGlips_numb();
-
-
+//debug
+    Glif_Rectange* start =  getRectange(0,0);
+    start->m_Start = true;
+    Glif_Rectange* stop =  getRectange(1,3);
+    stop->m_Stop = true;
+    m_scena->update();
+    QApplication::processEvents();
 
 }
 
