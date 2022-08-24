@@ -49,6 +49,16 @@ void MainWindow::search()
             {
                 int i;
                 i++;
+
+                var->m_go_back = true;
+                while(var!=start)
+                {
+                    var = var->m_father;
+                    var->m_go_back = true;
+                    m_scena->update();
+                    QApplication::processEvents();
+                }
+
                 return;
             }
             queue.enqueue(var);
@@ -89,12 +99,12 @@ void MainWindow::generate()
     }
     setGlips_numb();
 //debug
-    Glif_Rectange* start =  getRectange(0,0);
-    start->m_Start = true;
-    Glif_Rectange* stop =  getRectange(1,3);
-    stop->m_Stop = true;
-    m_scena->update();
-    QApplication::processEvents();
+//    Glif_Rectange* start =  getRectange(0,0);
+//    start->m_Start = true;
+//    Glif_Rectange* stop =  getRectange(1,3);
+//    stop->m_Stop = true;
+//    m_scena->update();
+//    QApplication::processEvents();
 
 }
 
